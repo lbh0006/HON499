@@ -12,39 +12,50 @@ import java.util.LinkedList;
  */
 import java.util.Random;
 
-class ProbabilitySelector<T> {
+class ProbabilitySelector<T> 
+{
     double sum;
     Random randomGenerator;
     
-    public ProbabilitySelector() {
+    public ProbabilitySelector() 
+    {
         super();
         randomGenerator = new Random();
         sum = 0.0;
     }
     
-    public ProbabilityNode<T> selectOption(ProbabilityNode<T> choice) {
-        if(!choice.hasChildren()) {
+    public ProbabilityNode<T> selectOption(ProbabilityNode<T> choice) 
+    {
+        if(!choice.hasChildren()) 
+        {
             ProbabilityNode<T> nullNode = new ProbabilityNode();
             return nullNode;
         }
         ProbabilityNode<T> temp = new ProbabilityNode();
         double probSum = 0.0;
-        for(int i = 0; i < choice.getNumChildren(); i++){
+       
+        for(int i = 0; i < choice.getNumChildren(); i++)
+        {
             probSum += choice.getChildAt(i).getProbability();
         }
-        if(probSum > 1.0) {
+        
+        if((probSum > 1.0) || (probSum < 1.0)) 
+        {
             System.out.print("ERROR: Invalid Probability Setup\n\n");
             return null;
         }
         sum = choice.getChildAt(0).getProbability();
         int randomInt = randomGenerator.nextInt(1000); // Get number in range 0 - 999
-        if(randomInt <= sum*1000) {
+        if(randomInt <= sum*1000) 
+        {
             return choice.getChildAt(0);
-       }
-       else {
+        }
+        else 
+        {
             int i = 0;
             sum = 0.0;
-            while (((sum * 1000) < randomInt)&&(i<choice.getNumChildren())) {
+            while (((sum * 1000) < randomInt)&&(i<choice.getNumChildren())) 
+            {
                 sum += choice.getChildAt(i).getProbability();
                 i++;
             }
@@ -53,98 +64,175 @@ class ProbabilitySelector<T> {
     }
 }
 
+class AdvancedProbabilitySelector<T> 
+{
+    double sum;
+    int upperBound;
+    int lowerBound;
+    Random randomGenerator;
+    
+    public AdvancedProbabilitySelector() 
+    {
+        super();
+        randomGenerator = new Random();
+        sum = 0.0;
+    }
+    
+    public ProbabilityNode<T> selectOption(ProbabilityNode<T> choice) 
+    {
+        if(!choice.hasChildren()) 
+        {
+            ProbabilityNode<T> nullNode = new ProbabilityNode();
+            return nullNode;
+        }
+        ProbabilityNode<T> temp = new ProbabilityNode();
+        double probSum = 0.0;
+        for(int i = 0; i < choice.getNumChildren(); i++)
+        {
+            probSum += choice.getChildAt(i).getProbability();
+        }
+        if((probSum > 1.0)||(probSum < 1.0)) 
+        {
+            System.out.print("ERROR: Invalid Probability Setup\n\n");
+            return null;
+        }
+        sum = choice.getChildAt(0).getProbability();
+        int randomInt = randomGenerator.nextInt(1000); // Get number in range 0 - 999
+        if(randomInt <= sum*1000) 
+        {
+            return choice.getChildAt(0);
+        }
+        else 
+        {
+            int i = 0;
+            sum = 0.0;
+            while (((sum * 1000) < randomInt)&&(i<choice.getNumChildren())) 
+            {
+                sum += choice.getChildAt(i).getProbability();
+                i++;
+            }
+            return choice.getChildAt(i-1);
+        }
+    }
+}
 
-class ProbabilityNode<T> {
+class ProbabilityNode<T> 
+{
     public T nodeObject;
     double probability;
     public List<ProbabilityNode<T>> children;
     
-    public ProbabilityNode() {
+    public ProbabilityNode() 
+    {
         super();
         this.children = new LinkedList<ProbabilityNode<T>>();
     }
     
-    public ProbabilityNode(T object, double prob) {
+    public ProbabilityNode(T object, double prob) 
+    {
         super();
         this.children = new LinkedList<ProbabilityNode<T>>();
         this.nodeObject = object;
         this.probability = prob;
     }
     
-    public ProbabilityNode(T object, double prob, LinkedList<ProbabilityNode<T>> childList) {
+    public ProbabilityNode(T object, 
+                           double prob, 
+                           LinkedList<ProbabilityNode<T>> childList
+                          ) 
+    {
         super();
         this.nodeObject = object;
         this.probability = prob;
         this.children = childList;
     }
     
-    public void setNodeObject(T object) {
+    public void setNodeObject(T object) 
+    {
         this.nodeObject = object;
     }
     
-    public T getNodeObject() {
+    public T getNodeObject() 
+    {
         return this.nodeObject;
     }
     
-    public void setProbability(double prob) {
+    public void setProbability(double prob) 
+    {
         this.probability = prob;
     }
     
-    public double getProbability() {
+    public double getProbability() 
+    {
         return this.probability;
     }
     
-    public List<ProbabilityNode<T>> getChildren(){
+    public List<ProbabilityNode<T>> getChildren()
+    {
         return children;
     }
     
-    public void setChildren(List<ProbabilityNode<T>> children) {
+    public void setChildren(List<ProbabilityNode<T>> children) 
+    {
         this.children = children;
     }
     
-    public void addChild(ProbabilityNode<T> childNode) {
+    public void addChild(ProbabilityNode<T> childNode) 
+    {
         this.children.add(childNode);
     }
     
-    public void addChildAt(int index, ProbabilityNode<T> child) throws IndexOutOfBoundsException {
+    public void addChildAt(int index, ProbabilityNode<T> child) 
+            throws IndexOutOfBoundsException 
+    {
         this.children.add(index, child);
     }
     
-    public ProbabilityNode<T> getChildAt(int index) throws IndexOutOfBoundsException {
+    public ProbabilityNode<T> getChildAt(int index) 
+            throws IndexOutOfBoundsException 
+    {
         return this.children.get(index);
     }
     
-    public void removeChildAt(int index) throws IndexOutOfBoundsException {
+    public void removeChildAt(int index) 
+            throws IndexOutOfBoundsException 
+    {
         this.children.remove(index);
     }
     
-    public int getNumChildren() {
+    public int getNumChildren() 
+    {
         return this.children.size();
     }
     
-    public boolean hasChildren() {
+    public boolean hasChildren() 
+    {
         return (getNumChildren() > 0);
     }
 }
 
-public class ProbabilityTree<T> {
+public class ProbabilityTree<T> 
+{
     ProbabilityNode<T> root;
     int iterator;
     ProbabilitySelector<T> selector;
     
-    public ProbabilityTree() {
+    public ProbabilityTree() 
+    {
         super();
         this.iterator = 0;
         this.selector = new ProbabilitySelector();
     }
     
-    public ProbabilityTree(ProbabilityNode<T> rootNode) {
+    public ProbabilityTree(ProbabilityNode<T> rootNode) 
+    {
         this.root = rootNode;
         this.iterator = 0;
         this.selector = new ProbabilitySelector();
     }
     
-    public ProbabilityNode<T> selectNodeChild(ProbabilityNode<T> node){
+    public ProbabilityNode<T> selectNodeChild(ProbabilityNode<T> node)
+    {
         return selector.selectOption(node);
     }
 
