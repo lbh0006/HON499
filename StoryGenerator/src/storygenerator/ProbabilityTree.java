@@ -39,7 +39,7 @@ class ProbabilitySelector<T>
             probSum += choice.getChildAt(i).getProbability();
         }
         
-        if((probSum > 1.0) || (probSum < 1.0)) 
+        if(probSum != 1.0) 
         {
             System.out.print("ERROR: Invalid Probability Setup\n\n");
             return null;
@@ -91,7 +91,7 @@ class AdvancedProbabilitySelector<T>
         {
             probSum += choice.getChildAt(i).getProbability();
         }
-        if((probSum > 1.0)||(probSum < 1.0)) 
+        if(probSum != 1.0) 
         {
             System.out.print("ERROR: Invalid Probability Setup\n\n");
             return null;

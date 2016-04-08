@@ -12,7 +12,7 @@ package storygenerator;
 
 public class StoryGenerator {
     Selector decisionMaker;
-    Scene[][] sceneMap;
+    ProbabilityTree<Scene> sceneMap;
     Character protagonist;
     
     public StoryGenerator() {
