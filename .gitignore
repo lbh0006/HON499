@@ -1,0 +1,8 @@
+#gitignore - files ignored by git
+
+# NetBeans specific #
+StoryGenerator/nbproject/
+StoryGenerator/build
+
+
+/StoryGerenator/dist/
