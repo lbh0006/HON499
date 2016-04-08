@@ -31,7 +31,6 @@ class ProbabilitySelector<T>
             ProbabilityNode<T> nullNode = new ProbabilityNode();
             return nullNode;
         }
-        ProbabilityNode<T> temp = new ProbabilityNode();
         double probSum = 0.0;
        
         for(int i = 0; i < choice.getNumChildren(); i++)
@@ -74,8 +73,10 @@ class AdvancedProbabilitySelector<T>
     public AdvancedProbabilitySelector() 
     {
         super();
-        randomGenerator = new Random();
-        sum = 0.0;
+        this.randomGenerator = new Random();
+        this.sum = 0.0;
+        this.upperBound = 1;
+        this.lowerBound = 0;
     }
     
     public ProbabilityNode<T> selectOption(ProbabilityNode<T> choice) 
@@ -85,7 +86,6 @@ class AdvancedProbabilitySelector<T>
             ProbabilityNode<T> nullNode = new ProbabilityNode();
             return nullNode;
         }
-        ProbabilityNode<T> temp = new ProbabilityNode();
         double probSum = 0.0;
         for(int i = 0; i < choice.getNumChildren(); i++)
         {
@@ -97,7 +97,15 @@ class AdvancedProbabilitySelector<T>
             return null;
         }
         sum = choice.getChildAt(0).getProbability();
-        int randomInt = randomGenerator.nextInt(1000); // Get number in range 0 - 999
+        upperBound = (int)(choice.upperBound * 1000);
+        lowerBound = (int)(choice.lowerBound * 1000);
+        
+        int randomInt = randomGenerator.nextInt(1000); // get num range 0 - 999
+        //Make sure chosen value is within bounds
+        while((randomInt > upperBound)||(randomInt < lowerBound))
+        {
+            randomInt = randomGenerator.nextInt(1000);
+        }
         if(randomInt <= sum*1000) 
         {
             return choice.getChildAt(0);
@@ -106,7 +114,7 @@ class AdvancedProbabilitySelector<T>
         {
             int i = 0;
             sum = 0.0;
-            while (((sum * 1000) < randomInt)&&(i<choice.getNumChildren())) 
+            while (((sum * 1000) < randomInt) && (i<choice.getNumChildren())) 
             {
                 sum += choice.getChildAt(i).getProbability();
                 i++;
@@ -120,12 +128,16 @@ class ProbabilityNode<T>
 {
     public T nodeObject;
     double probability;
+    double upperBound;
+    double lowerBound;
     public List<ProbabilityNode<T>> children;
     
     public ProbabilityNode() 
     {
         super();
         this.children = new LinkedList<ProbabilityNode<T>>();
+        this.upperBound = 1.0;
+        this.lowerBound = 0.0;
     }
     
     public ProbabilityNode(T object, double prob) 
@@ -134,6 +146,8 @@ class ProbabilityNode<T>
         this.children = new LinkedList<ProbabilityNode<T>>();
         this.nodeObject = object;
         this.probability = prob;
+        this.upperBound = 1.0;
+        this.lowerBound = 0.0;
     }
     
     public ProbabilityNode(T object, 
@@ -145,6 +159,33 @@ class ProbabilityNode<T>
         this.nodeObject = object;
         this.probability = prob;
         this.children = childList;
+        this.upperBound = 1.0;
+        this.lowerBound = 0.0;
+    }
+    
+     public ProbabilityNode(T object, double prob, double upBnd, double lowBnd) 
+    {
+        super();
+        this.children = new LinkedList<ProbabilityNode<T>>();
+        this.nodeObject = object;
+        this.probability = prob;
+        this.upperBound = upBnd;
+        this.lowerBound = lowBnd;
+    }
+    
+    public ProbabilityNode(T object, 
+                           double prob, 
+                           LinkedList<ProbabilityNode<T>> childList,
+                           double upBnd,
+                           double lowBnd
+                          ) 
+    {
+        super();
+        this.nodeObject = object;
+        this.probability = prob;
+        this.children = childList;
+        this.upperBound = upBnd;
+        this.lowerBound = lowBnd;
     }
     
     public void setNodeObject(T object) 

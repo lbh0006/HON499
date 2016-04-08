@@ -20,15 +20,12 @@ public class StoryGenerator {
     }
     
     public static void main(String[] args) {
-        testTwoLevels(0.4,0.2,0.4,0.4,0.2,0.4);
+        repeatOneChoice();
     }
     
     public static void repeatOneChoice() {
         ProbabilityTree<Scene> repeatOneTree = repeatOneSetup();
         ProbabilityNode<Scene> temp = repeatOneTree.selectNodeChild(repeatOneTree.root);
-        ProbabilityNode<Scene> temp2 = new ProbabilityNode();
-        ProbabilityNode<Scene> temp3 = new ProbabilityNode();
-        ProbabilityNode<Scene> temp4 = new ProbabilityNode();
 
         if(temp.getNodeObject() != null) {
             System.out.print(temp.getNodeObject().sceneName + "\n");
