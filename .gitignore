@@ -2,7 +2,6 @@
 
 # NetBeans specific #
 StoryGenerator/nbproject/
-StoryGenerator/build
-
+StoryGenerator/build/
 
 /StoryGerenator/dist/
