@@ -53,10 +53,10 @@ public class StoryGenerator {
                                     "You decide to exit the Room. ");
         
         ProbabilityNode<Scene> rootNode  = new ProbabilityNode(rootScene, 0.2);
-        ProbabilityNode<Scene> talkNode  = new ProbabilityNode(child1,    0.2);
+        ProbabilityNode<Scene> talkNode  = new ProbabilityNode(child1,    0.39);
         ProbabilityNode<Scene> workNode  = new ProbabilityNode(child2,    0.2);
-        ProbabilityNode<Scene> phoneNode = new ProbabilityNode(child3,    0.3);
-        ProbabilityNode<Scene> exitNode  = new ProbabilityNode(exitOp,    0.1);
+        ProbabilityNode<Scene> phoneNode = new ProbabilityNode(child3,    0.2);
+        ProbabilityNode<Scene> exitNode  = new ProbabilityNode(exitOp,    0.01);
         
         talkNode.addChild(rootNode);
         talkNode.addChild(talkNode);
