@@ -90,9 +90,9 @@ class AdvProbabilitySelector<T>
         for(int i = 0; i < choice.getNumChildren(); i++)
         {
             probSum += choice.getChildAt(i).getProbability();
-            System.out.println(i +" at "+choice.getChildAt(i).getProbability()+" is "+probSum);
         }
-        if(probSum != 1.0) 
+        if((probSum < 0.999999999999999) ||
+           (probSum > 1.000000000000001))
         {
             System.out.print("ERROR: Invalid Probability Setup\n\n");
             return null;

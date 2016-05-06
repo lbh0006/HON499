@@ -67,12 +67,18 @@ public class StoryGenerator {
         workNode.addChild(rootNode);
         workNode.addChild(talkNode);
         workNode.addChild(workNode);
-        talkNode.addChild(phoneNode);
+        workNode.addChild(phoneNode);
         workNode.addChild(exitNode);
+        
+        phoneNode.addChild(rootNode);
+        phoneNode.addChild(talkNode);
+        phoneNode.addChild(workNode);
+        phoneNode.addChild(phoneNode);
+        phoneNode.addChild(exitNode);
         
         rootNode.addChild(talkNode);
         rootNode.addChild(workNode);
-        talkNode.addChild(phoneNode);
+        rootNode.addChild(phoneNode);
         rootNode.addChild(exitNode);
         rootNode.addChildAt(0,rootNode);
         
