@@ -63,14 +63,14 @@ class ProbabilitySelector<T>
     }
 }
 
-class AdvancedProbabilitySelector<T> 
+class AdvProbabilitySelector<T> 
 {
     double sum;
     int upperBound;
     int lowerBound;
     Random randomGenerator;
     
-    public AdvancedProbabilitySelector() 
+    public AdvProbabilitySelector() 
     {
         super();
         this.randomGenerator = new Random();
@@ -90,6 +90,7 @@ class AdvancedProbabilitySelector<T>
         for(int i = 0; i < choice.getNumChildren(); i++)
         {
             probSum += choice.getChildAt(i).getProbability();
+            System.out.println(i +" at "+choice.getChildAt(i).getProbability()+" is "+probSum);
         }
         if(probSum != 1.0) 
         {
@@ -256,25 +257,53 @@ public class ProbabilityTree<T>
 {
     ProbabilityNode<T> root;
     int iterator;
-    ProbabilitySelector<T> selector;
+    AdvProbabilitySelector<T> selector;
     
     public ProbabilityTree() 
     {
         super();
         this.iterator = 0;
-        this.selector = new ProbabilitySelector();
+        this.selector = new AdvProbabilitySelector();
     }
     
     public ProbabilityTree(ProbabilityNode<T> rootNode) 
     {
         this.root = rootNode;
         this.iterator = 0;
-        this.selector = new ProbabilitySelector();
+        this.selector = new AdvProbabilitySelector();
     }
     
     public ProbabilityNode<T> selectNodeChild(ProbabilityNode<T> node)
     {
         return selector.selectOption(node);
     }
-
 }
+
+// ORIGINAL WORKING PROBABILITY TREE
+
+//public class ProbabilityTree<T> 
+//{
+//    ProbabilityNode<T> root;
+//    int iterator;
+//    ProbabilitySelector<T> selector;
+//    
+//    public ProbabilityTree() 
+//    {
+//        super();
+//        this.iterator = 0;
+//        this.selector = new ProbabilitySelector();
+//    }
+//    
+//    public ProbabilityTree(ProbabilityNode<T> rootNode) 
+//    {
+//        this.root = rootNode;
+//        this.iterator = 0;
+//        this.selector = new ProbabilitySelector();
+//    }
+//    
+//    public ProbabilityNode<T> selectNodeChild(ProbabilityNode<T> node)
+//    {
+//        return selector.selectOption(node);
+//    }
+//
+//}

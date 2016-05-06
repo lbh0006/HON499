@@ -19,6 +19,9 @@ public class StoryGenerator {
     }
     
     public static void main(String[] args) {
+//        initialTestOfAdvProbabilityTree(0.3333333, 0.5, 0.0,
+//                                        0.3333333, 0.5, 0.0,
+//                                        0.3333334, 0.5, 0.0);
         repeatOneChoice();
     }
     
@@ -44,26 +47,32 @@ public class StoryGenerator {
                                     "You decide to talk to your Co-worker. ");
         Scene child2    = new Scene("Work. ",
                                     "You decide to get some work done. ");
+        Scene child3    = new Scene("Phone. ",
+                                    "You decide to make a phone call. ");
         Scene exitOp    = new Scene("Exit the Room. ",
                                     "You decide to exit the Room. ");
         
-        ProbabilityNode<Scene> rootNode = new ProbabilityNode(rootScene, 0.25);
-        ProbabilityNode<Scene> talkNode = new ProbabilityNode(child1, 0.25);
-        ProbabilityNode<Scene> workNode = new ProbabilityNode(child2, 0.25);
-        ProbabilityNode<Scene> exitNode = new ProbabilityNode(exitOp, 0.25);
+        ProbabilityNode<Scene> rootNode  = new ProbabilityNode(rootScene, 0.2);
+        ProbabilityNode<Scene> talkNode  = new ProbabilityNode(child1,    0.2);
+        ProbabilityNode<Scene> workNode  = new ProbabilityNode(child2,    0.2);
+        ProbabilityNode<Scene> phoneNode = new ProbabilityNode(child3,    0.3);
+        ProbabilityNode<Scene> exitNode  = new ProbabilityNode(exitOp,    0.1);
         
         talkNode.addChild(rootNode);
         talkNode.addChild(talkNode);
         talkNode.addChild(workNode);
+        talkNode.addChild(phoneNode);
         talkNode.addChild(exitNode);
         
         workNode.addChild(rootNode);
         workNode.addChild(talkNode);
         workNode.addChild(workNode);
+        talkNode.addChild(phoneNode);
         workNode.addChild(exitNode);
         
         rootNode.addChild(talkNode);
         rootNode.addChild(workNode);
+        talkNode.addChild(phoneNode);
         rootNode.addChild(exitNode);
         rootNode.addChildAt(0,rootNode);
         
@@ -176,8 +185,11 @@ public class StoryGenerator {
         
         System.out.print("Error count: "+ error +"\n\n");
     }
-    
-    public static void initialTestOfProbabilityTree(double outProb, double ehProb, double inProb) {
+        
+    public static void initialTestOfProbabilityTree(double outProb, 
+                                                    double ehProb, 
+                                                    double inProb) 
+    {
         Scene rootScene = new Scene("root","This is the root.\n");
         Scene ehScene = new Scene("eh","This is the Eh? scene.\n");
         Scene InScene = new Scene("in","This is the In scene.\n");
@@ -185,6 +197,66 @@ public class StoryGenerator {
         ProbabilityNode<Scene> Out = new ProbabilityNode(OutScene, outProb);
         ProbabilityNode<Scene> eh = new ProbabilityNode(ehScene, ehProb);
         ProbabilityNode<Scene> In = new ProbabilityNode(InScene, inProb);
+        ProbabilityNode<Scene> root = new ProbabilityNode(rootScene,1.0);
+        root.addChild(Out);
+        root.addChild(In);
+        root.addChildAt(1, eh);
+        ProbabilityTree<Scene> basicTree = new ProbabilityTree(root);
+        ProbabilityNode<Scene> tempNode = new ProbabilityNode();
+        
+        int ehCount = 0;
+        int inCount = 0;
+        int outCount = 0;
+        int error = 0;
+        
+        for(int i=0; i<10000; i++){
+            tempNode = basicTree.selectNodeChild(root);
+            if(tempNode == In) {
+                inCount++;
+            }
+            else if(tempNode == Out) {
+                outCount++;
+            }
+            else if(tempNode == eh) {
+                ehCount++;
+            }
+            else {
+                error++;
+            }
+        }
+            
+        System.out.print("Eh? count: "+ ehCount +"\n");
+        System.out.print("In count: "+ inCount +"\n");
+        System.out.print("Out count: "+ outCount +"\n");
+        System.out.print("Error count: "+ error +"\n");
+    }    
+    
+    public static void initialTestOfAdvProbabilityTree(double outProb,
+                                                       double outUpB,
+                                                       double outLoB,
+                                                       double ehProb,
+                                                       double ehUpB,
+                                                       double ehLoB, 
+                                                       double inProb,
+                                                       double inUpB,
+                                                       double inLoB) 
+    {
+        Scene rootScene = new Scene("root","This is the root.\n");
+        Scene ehScene = new Scene("eh","This is the Eh? scene.\n");
+        Scene InScene = new Scene("in","This is the In scene.\n");
+        Scene OutScene = new Scene("out","This is the Out scene.\n");
+        ProbabilityNode<Scene> Out = new ProbabilityNode(OutScene, 
+                                                         outProb, 
+                                                         outUpB, 
+                                                         outLoB);
+        ProbabilityNode<Scene> eh = new ProbabilityNode(ehScene, 
+                                                        ehProb,
+                                                        ehUpB,
+                                                        ehLoB);
+        ProbabilityNode<Scene> In = new ProbabilityNode(InScene, 
+                                                        inProb,
+                                                        inUpB,
+                                                        inLoB);
         ProbabilityNode<Scene> root = new ProbabilityNode(rootScene,1.0);
         root.addChild(Out);
         root.addChild(In);
