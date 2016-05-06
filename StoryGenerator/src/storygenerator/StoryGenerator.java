@@ -11,7 +11,6 @@ package storygenerator;
  */
 
 public class StoryGenerator {
-    Selector decisionMaker;
     ProbabilityTree<Scene> sceneMap;
     Character protagonist;
     
@@ -218,37 +217,5 @@ public class StoryGenerator {
         System.out.print("In count: "+ inCount +"\n");
         System.out.print("Out count: "+ outCount +"\n");
         System.out.print("Error count: "+ error +"\n");
-    }
-    
-    public static void initialTestOfRand( double ehProb, double outProb, double inProb) {
-        Choice outOrIn = new Choice(3);
-        outOrIn.setChoice(0, "eh?", ehProb);
-        outOrIn.setChoice(1,"Out", outProb);
-        outOrIn.setChoice(2,"In", inProb);
-        
-        for(int i = 0; i < 3; i++) {
-            System.out.print(outOrIn.getOption(i)+" , "+outOrIn.getProbability(i)+"\n");
-        }
-        System.out.print("\n\n");
-        Selector s = new Selector();
-        String selection = new String();
-        int ehCount = 0;
-        int outCount = 0;
-        int inCount = 0;
-        for(int i = 0; i < 10000; i++) {
-            selection = s.selectOption(outOrIn);
-            if(selection.equals("eh?")){
-                ehCount++;
-            }
-            else if(selection.equals("Out")) {
-                outCount++;
-            }
-            else if(selection.equals("In")) {
-                inCount++;
-            }
-        }
-        System.out.print("Eh? count: "+ ehCount +"\n");
-        System.out.print("Out count: "+ outCount +"\n");
-        System.out.print("In count: "+ inCount +"\n");
     }
 }
