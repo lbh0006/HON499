@@ -90,8 +90,10 @@ class AdvProbabilitySelector<T>
         for(int i = 0; i < choice.getNumChildren(); i++)
         {
             probSum += choice.getChildAt(i).getProbability();
-//            System.out.println(i +" at "+choice.getChildAt(i).getProbability()+" is "+probSum);
-        }
+            // System.out.println(i + " at " +
+            //                    choice.getChildAt(i).getProbability() + 
+            //                    " is " + probSum);
+        } 
         probSum = probSum * 100000000;
         
         if((int)(probSum/(100000000)) != 1)
@@ -137,7 +139,6 @@ class ProbabilityNode<T>
     
     public ProbabilityNode() 
     {
-        super();
         this.children = new LinkedList<ProbabilityNode<T>>();
         this.upperBound = 1.0;
         this.lowerBound = 0.0;
@@ -145,7 +146,6 @@ class ProbabilityNode<T>
     
     public ProbabilityNode(T object, double prob) 
     {
-        super();
         this.children = new LinkedList<ProbabilityNode<T>>();
         this.nodeObject = object;
         this.probability = prob;
@@ -158,7 +158,6 @@ class ProbabilityNode<T>
                            LinkedList<ProbabilityNode<T>> childList
                           ) 
     {
-        super();
         this.nodeObject = object;
         this.probability = prob;
         this.children = childList;
@@ -168,7 +167,6 @@ class ProbabilityNode<T>
     
      public ProbabilityNode(T object, double prob, double upBnd, double lowBnd) 
     {
-        super();
         this.children = new LinkedList<ProbabilityNode<T>>();
         this.nodeObject = object;
         this.probability = prob;
@@ -183,7 +181,6 @@ class ProbabilityNode<T>
                            double lowBnd
                           ) 
     {
-        super();
         this.nodeObject = object;
         this.probability = prob;
         this.children = childList;

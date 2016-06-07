@@ -19,9 +19,8 @@ public class StoryGenerator {
     }
     
     public static void main(String[] args) {
-//        initialTestOfAdvProbabilityTree(0.3333333, 0.5, 0.0,
-//                                        0.3333333, 0.5, 0.0,
-//                                        0.3333334, 0.5, 0.0);
+        //initialTestOfAdvProbabilityTree(0.3333333, 0.3333333, 0.3333334, 
+        //                                1, 0.7);
         repeatOneChoice();
     }
     
@@ -52,10 +51,10 @@ public class StoryGenerator {
         Scene exitOp    = new Scene("Exit the Room. ",
                                     "You decide to exit the Room. ");
         
-        ProbabilityNode<Scene> rootNode  = new ProbabilityNode(rootScene, 0.2);
-        ProbabilityNode<Scene> talkNode  = new ProbabilityNode(child1,    0.39);
-        ProbabilityNode<Scene> workNode  = new ProbabilityNode(child2,    0.2);
-        ProbabilityNode<Scene> phoneNode = new ProbabilityNode(child3,    0.2);
+        ProbabilityNode<Scene> rootNode  = new ProbabilityNode(rootScene, 0.25);
+        ProbabilityNode<Scene> talkNode  = new ProbabilityNode(child1,    0.25);
+        ProbabilityNode<Scene> workNode  = new ProbabilityNode(child2,    0.25);
+        ProbabilityNode<Scene> phoneNode = new ProbabilityNode(child3,    0.24);
         ProbabilityNode<Scene> exitNode  = new ProbabilityNode(exitOp,    0.01);
         
         talkNode.addChild(rootNode);
@@ -238,37 +237,28 @@ public class StoryGenerator {
     }    
     
     public static void initialTestOfAdvProbabilityTree(double outProb,
-                                                       double outUpB,
-                                                       double outLoB,
                                                        double ehProb,
-                                                       double ehUpB,
-                                                       double ehLoB, 
                                                        double inProb,
-                                                       double inUpB,
-                                                       double inLoB) 
+                                                       double upBound,
+                                                       double loBound) 
     {
         Scene rootScene = new Scene("root","This is the root.\n");
         Scene ehScene = new Scene("eh","This is the Eh? scene.\n");
         Scene InScene = new Scene("in","This is the In scene.\n");
         Scene OutScene = new Scene("out","This is the Out scene.\n");
         ProbabilityNode<Scene> Out = new ProbabilityNode(OutScene, 
-                                                         outProb, 
-                                                         outUpB, 
-                                                         outLoB);
+                                                         outProb);
         ProbabilityNode<Scene> eh = new ProbabilityNode(ehScene, 
-                                                        ehProb,
-                                                        ehUpB,
-                                                        ehLoB);
+                                                        ehProb);
         ProbabilityNode<Scene> In = new ProbabilityNode(InScene, 
-                                                        inProb,
-                                                        inUpB,
-                                                        inLoB);
-        ProbabilityNode<Scene> root = new ProbabilityNode(rootScene,1.0);
+                                                        inProb);
+        ProbabilityNode<Scene> root = new ProbabilityNode(rootScene, 1.0, 
+                                                          upBound, loBound);
         root.addChild(Out);
         root.addChild(In);
         root.addChildAt(1, eh);
         ProbabilityTree<Scene> basicTree = new ProbabilityTree(root);
-        ProbabilityNode<Scene> tempNode = new ProbabilityNode();
+        ProbabilityNode<Scene> tempNode;
         
         int ehCount = 0;
         int inCount = 0;
