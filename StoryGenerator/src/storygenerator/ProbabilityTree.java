@@ -165,7 +165,7 @@ class ProbabilityNode<T>
         this.lowerBound = 0.0;
     }
     
-     public ProbabilityNode(T object, double prob, double upBnd, double lowBnd) 
+     public ProbabilityNode(T object, double prob, double lowBnd, double upBnd) 
     {
         this.children = new LinkedList<ProbabilityNode<T>>();
         this.nodeObject = object;
@@ -177,8 +177,8 @@ class ProbabilityNode<T>
     public ProbabilityNode(T object, 
                            double prob, 
                            LinkedList<ProbabilityNode<T>> childList,
-                           double upBnd,
-                           double lowBnd
+                           double lowBnd,
+                           double upBnd
                           ) 
     {
         this.nodeObject = object;
