@@ -66,8 +66,8 @@ class ProbabilitySelector<T>
 class AdvProbabilitySelector<T> 
 {
     double sum;
-    int upperBound;
-    int lowerBound;
+    double upperBound;
+    double lowerBound;
     Random randomGenerator;
     
     public AdvProbabilitySelector() 
@@ -75,8 +75,8 @@ class AdvProbabilitySelector<T>
         super();
         this.randomGenerator = new Random();
         this.sum = 0.0;
-        this.upperBound = 1;
-        this.lowerBound = 0;
+        this.upperBound = 1.0;
+        this.lowerBound = 0.0;
     }
     
     public ProbabilityNode<T> selectOption(ProbabilityNode<T> choice) 
@@ -96,35 +96,58 @@ class AdvProbabilitySelector<T>
         } 
         probSum = probSum * 100000000;
         
-        if((int)(probSum/(100000000)) != 1)
+        if((int)(probSum/100000000) != 1)
         {
             System.out.print("ERROR: Invalid Probability Setup\n\n");
             return null;
         }
-        sum = choice.getChildAt(0).getProbability();
-        upperBound = (int)(choice.upperBound * 1000);
-        lowerBound = (int)(choice.lowerBound * 1000);
         
-        int randomInt = randomGenerator.nextInt(1000); // get num range 0 - 999
-        //Make sure chosen value is within bounds
-        while((randomInt > upperBound)||(randomInt < lowerBound))
+        
+        probSum = 0.0;
+        upperBound = choice.upperBound;
+        lowerBound = choice.lowerBound;
+        
+        int i = 0;
+        while(i < choice.getNumChildren())
         {
-            randomInt = randomGenerator.nextInt(1000);
-        }
-        if(randomInt <= sum*1000) 
-        {
-            return choice.getChildAt(0);
-        }
-        else 
-        {
-            int i = 0;
-            sum = 0.0;
-            while (((sum * 1000) < randomInt) && (i<choice.getNumChildren())) 
+            double p = choice.getChildAt(i).getProbability();
+            if(p >= lowerBound)
             {
-                sum += choice.getChildAt(i).getProbability();
-                i++;
+                if(p > upperBound) 
+                    p = upperBound;
+                probSum += p;
             }
+            i++;
+        }
+        
+        // get num range 0 to (probSum*1000)-1
+        int randomInt = randomGenerator.nextInt((int)(probSum * 1000));
+        System.out.println("randomInt: "+randomInt);
+        System.out.println("probSum: "+probSum);
+        i = 0;
+        while(((sum * 1000) < randomInt) && (i < choice.getNumChildren()))
+        {
+            double p = choice.getChildAt(i).getProbability();
+            if(p >= lowerBound)
+            {
+                if(p > upperBound) 
+                    p = upperBound;
+                sum += p;
+            }
+            if(randomInt <= sum*1000) 
+            {
+                return choice.getChildAt(i);
+            }
+            i++;
+        }
+        
+        if((choice.getChildAt(i-1).getProbability() >= lowerBound) &&
+           (choice.getChildAt(i-1).getProbability() <= upperBound))
             return choice.getChildAt(i-1);
+        else
+        {
+            System.out.println("ERROR: This algorithm is Wrong.");
+            return new ProbabilityNode();
         }
     }
 }

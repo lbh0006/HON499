@@ -22,8 +22,8 @@ public class StoryGenerator {
         //initialTestOfAdvProbabilityTree(0.3333333, 0.3333333, 0.3333334, 
         //                                0.33, 0.7);
                
-        testTwoAdvLevels(0.3333333, 0.0, 0.7, 0.3333333, 0.15, 0.85,
-                         0.3333334, 0.3, 1.0, 0.3333333, 0.3333333, 
+        testTwoAdvLevels(0.3333333, 0.2, 0.7, 0.3333333, 0.15, 0.85,
+                         0.3333334, 0.0, 1.0, 0.3333333, 0.3333333, 
                          0.3333334);
     }
     
@@ -113,8 +113,8 @@ public class StoryGenerator {
         root.addChild(In1);
         root.addChildAt(1, eh1);
         ProbabilityTree<Scene> basicTree = new ProbabilityTree(root);
-        ProbabilityNode<Scene> tempNode = new ProbabilityNode();
-        ProbabilityNode<Scene> tempNode2 = new ProbabilityNode();
+        ProbabilityNode<Scene> tempNode;
+        ProbabilityNode<Scene> tempNode2;
         
         int OutOutCount = 0;
         int OutEhCount = 0;
