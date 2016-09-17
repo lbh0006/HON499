@@ -19,9 +19,11 @@ public class StoryGenerator {
     }
     
     public static void main(String[] args) {
-        //initialTestOfAdvProbabilityTree(0.3333333, 0.3333333, 0.3333334, 
-        //                                1, 0.7);
-        repeatOneChoice();
+        initialTestOfAdvProbabilityTree(0.3, 0.3, 0.3, 
+                                        0.0002, 1.0,
+                                        0.0002, 1.0,
+                                        0.0002, 1.0);
+        //repeatOneChoice();
     }
     
     public static void repeatOneChoice() {
@@ -239,21 +241,29 @@ public class StoryGenerator {
     public static void initialTestOfAdvProbabilityTree(double outProb,
                                                        double ehProb,
                                                        double inProb,
-                                                       double upBound,
-                                                       double loBound) 
+                                                       double loB1, double upB1,
+                                                       double loB2, double upB2,
+                                                       double loB3, double upB3
+                                                       ) 
     {
         Scene rootScene = new Scene("root","This is the root.\n");
         Scene ehScene = new Scene("eh","This is the Eh? scene.\n");
         Scene InScene = new Scene("in","This is the In scene.\n");
         Scene OutScene = new Scene("out","This is the Out scene.\n");
         ProbabilityNode<Scene> Out = new ProbabilityNode(OutScene, 
-                                                         outProb);
+                                                         outProb,
+                                                         loB1,
+                                                         upB1);
         ProbabilityNode<Scene> eh = new ProbabilityNode(ehScene, 
-                                                        ehProb);
+                                                        ehProb,
+                                                        loB2,
+                                                        upB2);
         ProbabilityNode<Scene> In = new ProbabilityNode(InScene, 
-                                                        inProb);
-        ProbabilityNode<Scene> root = new ProbabilityNode(rootScene, 1.0, 
-                                                          upBound, loBound);
+                                                        inProb,
+                                                        loB3,
+                                                        upB3);
+        ProbabilityNode<Scene> root = new ProbabilityNode(rootScene, 1.0);
+        
         root.addChild(Out);
         root.addChild(In);
         root.addChildAt(1, eh);
@@ -281,9 +291,12 @@ public class StoryGenerator {
             }
         }
             
+        System.out.print("Out count: "+ outCount +"\n");
         System.out.print("Eh? count: "+ ehCount +"\n");
         System.out.print("In count: "+ inCount +"\n");
-        System.out.print("Out count: "+ outCount +"\n");
-        System.out.print("Error count: "+ error +"\n");
+        System.out.print("Error count: "+ error +"\n\n");
+        System.out.print("Out Prob: "+Out.getProbability()+"\n");
+        System.out.print("Eh? Prob: "+eh.getProbability()+"\n");
+        System.out.print("In Prob: "+In.getProbability()+"\n");
     }
 }

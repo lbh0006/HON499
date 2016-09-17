@@ -31,18 +31,8 @@ class ProbabilitySelector<T>
             ProbabilityNode<T> nullNode = new ProbabilityNode();
             return nullNode;
         }
-        double probSum = 0.0;
-       
-        for(int i = 0; i < choice.getNumChildren(); i++)
-        {
-            probSum += choice.getChildAt(i).getProbability();
-        }
+        choice.normalize();
         
-        if(probSum != 1.0) 
-        {
-            System.out.print("ERROR: Invalid Probability Setup\n\n");
-            return null;
-        }
         sum = choice.getChildAt(0).getProbability();
         int randomInt = randomGenerator.nextInt(1000); // Get number in range 0 - 999
         if(randomInt <= sum*1000) 
@@ -81,51 +71,62 @@ class AdvProbabilitySelector<T>
     
     public ProbabilityNode<T> selectOption(ProbabilityNode<T> choice) 
     {
+        // Make sure choice has options to choose from
         if(!choice.hasChildren()) 
         {
             ProbabilityNode<T> nullNode = new ProbabilityNode();
             return nullNode;
         }
-        double probSum = 0.0;
-        for(int i = 0; i < choice.getNumChildren(); i++)
-        {
-            probSum += choice.getChildAt(i).getProbability();
-            // System.out.println(i + " at " +
-            //                    choice.getChildAt(i).getProbability() + 
-            //                    " is " + probSum);
-        } 
-        probSum = probSum * 100000000;
+        //Make sure choice probabilities are distributed properly
+        choice.normalize();
         
-        if((int)(probSum/(100000000)) != 1)
-        {
-            System.out.print("ERROR: Invalid Probability Setup\n\n");
-            return null;
-        }
-        sum = choice.getChildAt(0).getProbability();
-        upperBound = (int)(choice.upperBound * 1000);
-        lowerBound = (int)(choice.lowerBound * 1000);
-        
+        // Initialize randomInt and sum
         int randomInt = randomGenerator.nextInt(1000); // get num range 0 - 999
-        //Make sure chosen value is within bounds
-        while((randomInt > upperBound)||(randomInt < lowerBound))
-        {
-            randomInt = randomGenerator.nextInt(1000);
-        }
-        if(randomInt <= sum*1000) 
-        {
-            return choice.getChildAt(0);
+        sum = choice.getChildAt(0).getProbability();
+        ProbabilityNode<T> selectedNode;
+        if(randomInt <= sum*1000) {
+            selectedNode = choice.getChildAt(0);
         }
         else 
         {
             int i = 0;
             sum = 0.0;
-            while (((sum * 1000) < randomInt) && (i<choice.getNumChildren())) 
+            while (((sum * 1000) < randomInt) && (i < choice.getNumChildren()))
             {
                 sum += choice.getChildAt(i).getProbability();
                 i++;
             }
-            return choice.getChildAt(i-1);
+            if(i>0){ selectedNode = choice.getChildAt(i-1); }
+            else   { selectedNode = choice.getChildAt(i);}
         }
+        
+        double lb = selectedNode.lowerBound;
+        double ub = selectedNode.upperBound;
+        selectedNode.setProbability(selectedNode.getProbability() + lb);
+        if(selectedNode.getProbability() < 0)
+        {
+            selectedNode.setProbability(0.0);
+        }
+        if(lb < 0)
+        {
+            lb = 0.0;
+        }
+
+        for(int i = 0; i < choice.getNumChildren(); i++)
+        {
+            ProbabilityNode<T> temp = choice.getChildAt(i);
+            if(temp.getProbability() > ub)
+            {
+		choice.getChildAt(i).setProbability(ub);
+            }
+            double newProb = temp.getProbability()-lb;
+            if(newProb < 0.0){newProb = 0.0;}
+            choice.getChildAt(i).setProbability(newProb);
+        }
+
+        choice.normalize();
+        
+        return selectedNode;
     }
 }
 
@@ -165,7 +166,7 @@ class ProbabilityNode<T>
         this.lowerBound = 0.0;
     }
     
-     public ProbabilityNode(T object, double prob, double upBnd, double lowBnd) 
+     public ProbabilityNode(T object, double prob, double lowBnd, double upBnd) 
     {
         this.children = new LinkedList<ProbabilityNode<T>>();
         this.nodeObject = object;
@@ -249,6 +250,21 @@ class ProbabilityNode<T>
     public boolean hasChildren() 
     {
         return (getNumChildren() > 0);
+    }
+    
+    public void normalize()
+    {
+        double newProbSum = 0;
+	
+	for(int i = 0; i < this.getNumChildren(); i++)
+	{
+		newProbSum += this.getChildAt(i).getProbability();
+	}
+	for(int i = 0; i < this.getNumChildren(); i++)
+	{
+		double prob = this.getChildAt(i).getProbability();
+		this.getChildAt(i).setProbability(prob / newProbSum);
+	}
     }
 }
 
