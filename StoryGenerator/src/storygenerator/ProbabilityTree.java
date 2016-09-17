@@ -293,32 +293,3 @@ public class ProbabilityTree<T>
         return selector.selectOption(node);
     }
 }
-
-// ORIGINAL WORKING PROBABILITY TREE
-
-//public class ProbabilityTree<T> 
-//{
-//    ProbabilityNode<T> root;
-//    int iterator;
-//    ProbabilitySelector<T> selector;
-//    
-//    public ProbabilityTree() 
-//    {
-//        super();
-//        this.iterator = 0;
-//        this.selector = new ProbabilitySelector();
-//    }
-//    
-//    public ProbabilityTree(ProbabilityNode<T> rootNode) 
-//    {
-//        this.root = rootNode;
-//        this.iterator = 0;
-//        this.selector = new ProbabilitySelector();
-//    }
-//    
-//    public ProbabilityNode<T> selectNodeChild(ProbabilityNode<T> node)
-//    {
-//        return selector.selectOption(node);
-//    }
-//
-//}
