@@ -10,11 +10,12 @@ import StoryGeneratorGUI.GUIWindow;
  * @author Lindsey Harris
  */
 public class StoryGenerator {
+    public static String storyText;
     ProbabilityTree<Scene> sceneMap;
     Character protagonist;
     
     public StoryGenerator() {
-        
+        this.storyText = "TESTING, PLEASE WORK.";
     }
     
     public static void main(String[] args) {

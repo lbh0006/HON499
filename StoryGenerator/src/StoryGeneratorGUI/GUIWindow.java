@@ -5,6 +5,7 @@
  */
 package StoryGeneratorGUI;
 
+import storygenerator.StoryGenerator;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -24,12 +25,13 @@ public final class GUIWindow extends JFrame{
     JPanel btnPanel,textPanel;
     JScrollPane scrollPane;
     JButton saveBtn, generateBtn;
-    JTextField story;
-    String storyText;
+    JTextPane story;
+    static String storyText;
     
     public GUIWindow() {
-        //storyText = StoryGenerator.storyText;
-        story = new JTextField(storyText);
+        storyText = StoryGenerator.storyText;
+        story = new JTextPane();
+        story.setText(storyText);
         textPanel = new JPanel();
         textPanel.setLayout(new GridLayout(1,1,1,1));
         textPanel.add(story);
@@ -40,7 +42,7 @@ public final class GUIWindow extends JFrame{
         scrollPane.setPreferredSize(new Dimension(100, 100));
         
         setTitle("Story Generator");
-        setMinimumSize(new Dimension(500, 500));
+        setMinimumSize(new Dimension(600, 450));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         setLayout(new BorderLayout());
