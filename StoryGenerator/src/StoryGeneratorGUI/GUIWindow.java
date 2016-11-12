@@ -14,6 +14,10 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 /**
  *
@@ -22,16 +26,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 // GUI - full screen window
 public final class GUIWindow extends JFrame{
+    StoryGenerator sGen = new StoryGenerator();
     JPanel btnPanel,textPanel;
     JScrollPane scrollPane;
     JButton saveBtn, generateBtn;
     JTextPane story;
-    static String storyText;
     
     public GUIWindow() {
-        storyText = StoryGenerator.storyText;
         story = new JTextPane();
-        story.setText(storyText);
         textPanel = new JPanel();
         textPanel.setLayout(new GridLayout(1,1,1,1));
         textPanel.add(story);
@@ -57,13 +59,14 @@ public final class GUIWindow extends JFrame{
         mainBtnPanel.add(btnPanel);
         mainBtnPanel.add(new JPanel());
         add(mainBtnPanel, BorderLayout.SOUTH); 
+        this.addListeners();
     }
     
     public void addListeners() {
         generateBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                story.setText("Generate");
+                story.setText(sGen.storyText);
                 
             }
         });
@@ -73,7 +76,6 @@ public final class GUIWindow extends JFrame{
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                story.setText("Save");
                 //get a file chooser, add a filter for txt only
                 JFileChooser c = new JFileChooser();
                 FileFilter filter = new FileNameExtensionFilter("txt text files", "txt");
@@ -89,11 +91,22 @@ public final class GUIWindow extends JFrame{
                         fileName += ".txt";
                     }
 
-                    //get new instance of AstroDraw and create the offscreen image
-                    //AstroDraw ad = new AstroDraw();
-                    //ad.createOffScreenImage(fileName);
+                    //create document
+                    writeToFile(fileName, story.getText());
                 }
             }
-        });
+        });   
     }
+    
+    public static void writeToFile(String fileName, String text) {
+        try {
+            Files.write(Paths.get(fileName),
+                        text.getBytes(),
+                        StandardOpenOption.CREATE);
+        }
+        catch(IOException e)
+        {
+            //do nothing
+        }
+    };
 }
