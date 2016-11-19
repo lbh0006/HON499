@@ -10,26 +10,39 @@ import StoryGeneratorGUI.GUIWindow;
  * @author Lindsey Harris
  */
 public class StoryGenerator {
-    public String storyText;
-    ProbabilityTree<Scene> sceneMap;
+    public static String storyText;
+    public static ProbabilityTree<Scene> sceneMap;
     Character protagonist;
     
     public StoryGenerator() {
-        this.storyText = "";
+        storyText = "";
     }
     
     public static void main(String[] args) {
         
-        ApplicationTester t = new ApplicationTester();
-        t.initialTestOfAdvProbabilityTree(0.3, 0.3, 0.3, 
-                                          0.0002, 1.0,
-                                          0.0002, 1.0,
-                                          0.0002, 1.0);
-        
+        sceneMap = setupDemo(); 
         GUIWindow gui = new GUIWindow();
     }
     
-    public void setupDemo() {
+    public static String getText()
+    {
+        return storyText;
+    }
+    
+    public static void generateStory(ProbabilityTree<Scene> tree)
+    {
+        ProbabilityNode<Scene> temp = tree.root;
+        storyText = temp.nodeObject.sceneText;
+        while(temp.hasChildren())
+        {
+            temp = tree.selectNodeChild(temp);
+            System.out.print(temp.nodeObject.sceneName+"\n");
+            storyText = storyText+temp.nodeObject.sceneText;
+        }
+        System.out.print(storyText);
+    }
+    
+    public static ProbabilityTree<Scene> setupDemo() {
         Scene rootScene = new Scene("Talk to King",
                 "     Once upon a time, in a faraway kingdom, there was a sickness in the land. The king’s sister, who\n"+
                 "was loved by all, was one of the many who became ill, and much to the sorrow of the kingdom, she\n"+
@@ -48,9 +61,9 @@ public class StoryGenerator {
                 "life was like-- attending parties and events and providing entertainment for the king. He offered to teach\n"+
                 "him the lyre.\n\n");
         Scene talkKnightScene = new Scene("Talk to Knight",
-                "");
+                "talk knight\n");
         Scene talkPrincessScene = new Scene("Talk to Princess",
-                "");
+                "talk princess\n");
         Scene playInstrumentScene = new Scene("Play Instrument",
                 "The boy thought the lyre looked interesting, and so asked if he could try it. The minstrel handed it over,\n"+
                 "and showed him how to play a song. He said,\n\n"+
@@ -60,13 +73,13 @@ public class StoryGenerator {
                 "would like to have, so he went to the king and told him he would like to be a minstrel. The king\n"+
                 "congratulated him on his decision and welcomed him into his court.\n\nThe End.\n\n");
         Scene trainScene = new Scene("Train",
-                "");
+                "train\n");
         Scene chooseKnightScene = new Scene("Choose Knight",
-                "");
+                "choose knight\n");
         Scene romanceScene = new Scene("Romance Princess",
-                "");
+                "romance princess\n");
         Scene proposeScene = new Scene("Propose to Princess",
-                "");
+                "propose to princess\n");
         
         //Root
         ProbabilityNode<Scene> rootNode  = 
@@ -82,48 +95,79 @@ public class StoryGenerator {
         
         //Level 2
         ProbabilityNode<Scene> minstrelNode2  = 
-                new ProbabilityNode(talkMinstrelScene, 0.25);
+                new ProbabilityNode(talkMinstrelScene, 0.25, 0.03, 1.0);
         ProbabilityNode<Scene> knightNode2  = 
-                new ProbabilityNode(talkKnightScene, 0.25);
+                new ProbabilityNode(talkKnightScene, 0.25, 0.03, 1.0);
         ProbabilityNode<Scene> princessNode2 = 
-                new ProbabilityNode(talkPrincessScene, 0.25);
+                new ProbabilityNode(talkPrincessScene, 0.25, 0.03, 1.0);
         ProbabilityNode<Scene> playNode  = 
-                new ProbabilityNode(playInstrumentScene, 0.25);
+                new ProbabilityNode(playInstrumentScene, 0.25, 0.03, 1.0);
         ProbabilityNode<Scene> chooseMinstrelNode = 
-                new ProbabilityNode(chooseMinstrelScene, 0.25);
+                new ProbabilityNode(chooseMinstrelScene, 0.25, 0.03, 1.0);
         ProbabilityNode<Scene> trainNode =
-                new ProbabilityNode(trainScene, 0.25);
+                new ProbabilityNode(trainScene, 0.25, 0.03, 1.0);
         ProbabilityNode<Scene> chooseKnightNode = 
-                new ProbabilityNode(chooseKnightScene, 0.25);
+                new ProbabilityNode(chooseKnightScene, 0.25, 0.03, 1.0);
         ProbabilityNode<Scene> romanceNode =
-                new ProbabilityNode(romanceScene, 0.25);
+                new ProbabilityNode(romanceScene, 0.25, 0.03, 1.0);
+        ProbabilityNode<Scene> proposeNode =
+                new ProbabilityNode(proposeScene, 0.25, 0.03, 1.0);
         
-        //ProbabilityNode<Scene> exitNode  = new ProbabilityNode(exitOp,    0.01);
+        //Build Tree from the bottom up
+        // Level 4
+        minstrelNode2.addChild(playNode);
+        minstrelNode2.addChild(knightNode2);
+        minstrelNode2.addChild(princessNode2);
+        minstrelNode2.addChild(chooseMinstrelNode);
         
-        minstrelNode1.addChild(rootNode);
-        minstrelNode1.addChild(minstrelNode1);
-        minstrelNode1.addChild(knightNode1);
-        minstrelNode1.addChild(princessNode1);
-        //minstrelNode1.addChild(exitNode);
+        knightNode2.addChild(trainNode);
+        knightNode2.addChild(minstrelNode2);
+        knightNode2.addChild(princessNode2);
+        knightNode2.addChild(chooseKnightNode);
         
-        knightNode1.addChild(rootNode);
-        knightNode1.addChild(minstrelNode1);
-        knightNode1.addChild(knightNode1);
-        knightNode1.addChild(princessNode1);
-        //knightNode1.addChild(exitNode);
+        princessNode2.addChild(romanceNode);
+        princessNode2.addChild(knightNode2);
+        princessNode2.addChild(minstrelNode2);
+        princessNode2.addChild(proposeNode);
         
-        princessNode1.addChild(rootNode);
-        princessNode1.addChild(minstrelNode1);
-        princessNode1.addChild(knightNode1);
-        princessNode1.addChild(princessNode1);
-        //princessNode1.addChild(exitNode);
+        // Level 3
+        playNode.addChild(knightNode2);
+        playNode.addChild(princessNode2);
+        playNode.addChild(chooseMinstrelNode);
+        playNode.addChild(playNode); //Add recursive element
         
+        trainNode.addChild(princessNode2);
+        trainNode.addChild(minstrelNode2);
+        trainNode.addChild(chooseKnightNode);
+        trainNode.addChild(trainNode); //Add recursive element
+        
+        romanceNode.addChild(minstrelNode2);
+        romanceNode.addChild(knightNode2);
+        romanceNode.addChild(proposeNode);
+        romanceNode.addChild(romanceNode); //Add recursive element
+        
+        // Level 2
+        minstrelNode1.addChild(playNode);
+        minstrelNode1.addChild(knightNode2);
+        minstrelNode1.addChild(princessNode2);
+        minstrelNode1.addChild(chooseMinstrelNode);
+        
+        knightNode1.addChild(trainNode);
+        knightNode1.addChild(minstrelNode2);
+        knightNode1.addChild(princessNode2);
+        knightNode1.addChild(chooseKnightNode);
+        
+        princessNode1.addChild(romanceNode);
+        princessNode1.addChild(knightNode2);
+        princessNode1.addChild(minstrelNode2);
+        princessNode1.addChild(proposeNode);
+        
+        // Level 1
         rootNode.addChild(minstrelNode1);
         rootNode.addChild(knightNode1);
         rootNode.addChild(princessNode1);
-        //rootNode.addChild(exitNode);
-        rootNode.addChildAt(0,rootNode);
         
         ProbabilityTree<Scene> demoTree = new ProbabilityTree(rootNode);
+        return demoTree;
     }
 }

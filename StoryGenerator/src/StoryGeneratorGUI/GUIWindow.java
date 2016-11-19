@@ -6,6 +6,8 @@
 package StoryGeneratorGUI;
 
 import storygenerator.StoryGenerator;
+import storygenerator.ProbabilityTree;
+import storygenerator.Scene;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -66,8 +68,8 @@ public final class GUIWindow extends JFrame{
         generateBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
+                sGen.generateStory(sGen.sceneMap);
                 story.setText(sGen.storyText);
-                
             }
         });
         
