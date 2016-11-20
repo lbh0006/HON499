@@ -120,7 +120,7 @@ class AdvProbabilitySelector<T>
 		choice.getChildAt(i).setProbability(ub);
             }
             double newProb = temp.getProbability()-lb;
-            if(newProb < 0.0){newProb = 0.0;}
+            if(newProb < 0.0){newProb = 0.001;}
             choice.getChildAt(i).setProbability(newProb);
         }
 
