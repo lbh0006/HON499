@@ -82,7 +82,7 @@ public class StoryGenerator {
                 "would like to have, so he went to the king and told him he would like to be a minstrel. The king\n"+
                 "congratulated him on his decision and welcomed him into his court.\n\nThe End.\n\n");
         Scene trainScene = new Scene("Train",
-                "The boy decided to try some of the Captain's training techniques, and so spent some time practicing his combat skills.\n");
+                "The boy decided to try some of the Captain's training techniques, and so spent some time practicing his combat skills.\n\n");
         Scene chooseKnightScene = new Scene("Choose Knight",
                 "     After thinking about it for a while, the boy decided that defending the kingdom was a task he would be proud to\n"+
                 "spend his life doing, so he went to the king and told him,\n\n"+
@@ -114,23 +114,23 @@ public class StoryGenerator {
         
         //Level 2
         ProbabilityNode<Scene> minstrelNode2  = 
-                new ProbabilityNode(talkMinstrelScene1, 0.25, 0.03, 1.0);
+                new ProbabilityNode(talkMinstrelScene1, 0.25, 0.05, 1.0);
         ProbabilityNode<Scene> knightNode2  = 
-                new ProbabilityNode(talkKnightScene1, 0.25, 0.03, 1.0);
+                new ProbabilityNode(talkKnightScene1, 0.25, 0.05, 1.0);
         ProbabilityNode<Scene> princessNode2 = 
-                new ProbabilityNode(talkPrincessScene, 0.25, 0.03, 1.0);
+                new ProbabilityNode(talkPrincessScene, 0.25, 0.05, 1.0);
         ProbabilityNode<Scene> playNode  = 
-                new ProbabilityNode(playInstrumentScene, 0.25, 0.03, 1.0);
+                new ProbabilityNode(playInstrumentScene, 0.25, 0.05, 1.0);
         ProbabilityNode<Scene> chooseMinstrelNode = 
-                new ProbabilityNode(chooseMinstrelScene, 0.25, 0.03, 1.0);
+                new ProbabilityNode(chooseMinstrelScene, 0.25, 0.05, 1.0);
         ProbabilityNode<Scene> trainNode =
-                new ProbabilityNode(trainScene, 0.25, 0.03, 1.0);
+                new ProbabilityNode(trainScene, 0.25, 0.05, 1.0);
         ProbabilityNode<Scene> chooseKnightNode = 
-                new ProbabilityNode(chooseKnightScene, 0.25, 0.03, 1.0);
+                new ProbabilityNode(chooseKnightScene, 0.25, 0.05, 1.0);
         ProbabilityNode<Scene> romanceNode =
-                new ProbabilityNode(romanceScene, 0.25, 0.03, 1.0);
+                new ProbabilityNode(romanceScene, 0.25, 0.05, 1.0);
         ProbabilityNode<Scene> proposeNode =
-                new ProbabilityNode(proposeScene, 0.25, 0.03, 1.0);
+                new ProbabilityNode(proposeScene, 0.25, 0.05, 1.0);
         
         //Build Tree from the bottom up
         // Level 4
